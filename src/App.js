@@ -12,7 +12,7 @@ class App extends Component {
           <h2>React Eshop</h2>
         </div>
         <p className="App-intro">
-          Marketplace for coding gigs.
+          Easy, reusable Eshop in React.
         </p>
       </div>
     );
