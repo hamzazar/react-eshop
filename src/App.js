@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import logo from './img/reacteshop-logo-100.png';
+import logo from './img/reacteshop-logo-50.jpg';
 import './App.css';
 
 class App extends Component {
