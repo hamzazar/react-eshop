@@ -1,12 +1,14 @@
 // @flow
 import React, { Component } from 'react';
+import ProductSummary from './ProductSummary';
 import {
-  Grid,
+  Grid, Row, Col,
   Navbar,
   Nav,
   NavItem,
-  Jumbotron,
-  Button } from 'react-bootstrap';
+  Jumbotron } from 'react-bootstrap';
+import bookImage from './book-mock.jpg';
+import gigImage from './gig-mock.jpg';
 
 class App extends Component {
   render() {
@@ -33,12 +35,61 @@ class App extends Component {
           </Grid>
         </Navbar>
         <Jumbotron>
-          <Grid>
-            <h1>Easily Reusable Eshop in React</h1>
-            <p>Eshop written in React, ES6, and Firebase.</p>
-            <p><Button bsStyle="success" bsSize="large">Learn more</Button></p>
-          </Grid>
+          <ProductSummary
+            name="React Eshop"
+            description={`Easily reusable Eshop in React, ES6, and Facebook.`}
+            price={9.99}
+            book
+            referral
+            link='https://leanpub.com/reacteshop'
+            image={bookImage}
+            splash
+          />
         </Jumbotron>
+        <Grid>
+          <Row>
+            <Col xs={12} md={6} lg={3}>
+              <ProductSummary
+                name="Setup React Webpack"
+                description={`Development environment setup using React and
+                  Webpack.`}
+                price={25}
+                image={gigImage}
+              />
+            </Col>
+            <Col xs={12} md={6} lg={3}>
+              <ProductSummary
+                name="React Eshop"
+                description={`Easily reusable Eshop in React, ES6, and Facebook.`}
+                price={9.99}
+                book
+                referral
+                link='https://leanpub.com/reacteshop'
+                image={bookImage}
+              />
+            </Col>
+            <Col xs={12} md={6} lg={3}>
+              <ProductSummary
+                name="Custom React Stack"
+                description={`Custom React tech stack based on your project.`}
+                price={99}
+                image={gigImage}
+              />
+            </Col>
+            <Col xs={12} md={6} lg={3}>
+              <ProductSummary
+                name="React Speed Coding"
+                description={`Develop custom UI library in React, Flexbox, and
+                  PostCSS.`}
+                price={9.99}
+                book
+                referral
+                link='https://leanpub.com/reactspeedcoding'
+                image={bookImage}
+              />
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }
