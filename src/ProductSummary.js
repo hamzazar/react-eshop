@@ -12,18 +12,15 @@ export default class ProductSummary extends Component {
     price: PropTypes.number.isRequired,
     display: PropTypes.string.isRequired,
     referral: PropTypes.bool,
-    link: PropTypes.string,
-    card: PropTypes.bool
+    link: PropTypes.string
   }
   static defaultProps = {
     link: '',
-    referral: false,
-    splash: false,
-    card: false
+    referral: false
   }
   constructor(props) {
     super(props);
-    this.state = { likes: this.props.likes, inCart: 0 }
+    this.state = { inCart: 0 }
     this.getProduct = this.getProduct.bind(this);
     this.productDetail = this.productDetail.bind(this);
   }
@@ -67,6 +64,16 @@ export default class ProductSummary extends Component {
         default: buttonSize = 'small';
     }
 
+    // Render this for Get Product button
+    const getProductButton =
+      <Button
+        onClick={this.getProduct}
+        bsStyle={callToActionStyle}
+        bsSize={buttonSize}>
+        {this.props.referral ? 'Visit site ' : 'Add to cart '}
+        {callToActionContent}
+      </Button>
+
     // Render this for Product detail button
     let productDetailButton =
       <Button
@@ -78,18 +85,8 @@ export default class ProductSummary extends Component {
 
     // No product detail required for referral products
     productDetailButton = this.props.referral
-      ? ''
+      ? null
       : productDetailButton;
-
-    // Render this for Get Product button
-    const getProductButton =
-      <Button
-        onClick={this.getProduct}
-        bsStyle={callToActionStyle}
-        bsSize={buttonSize}>
-        {this.props.referral ? 'Visit site ' : 'Add to cart '}
-        {callToActionContent}
-      </Button>
 
     // Render this for call-to-action buttons
     const buttons = <p>{getProductButton} {productDetailButton}</p>;
