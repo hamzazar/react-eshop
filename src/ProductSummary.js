@@ -1,3 +1,4 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 import { Grid, Row, Col, Well, Thumbnail, Button, Glyphicon, Badge } from 'react-bootstrap';
 import './ProductSummary.css';
@@ -6,27 +7,35 @@ export default class ProductSummary extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    book: PropTypes.bool,
+    thumb: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    display: PropTypes.string.isRequired,
     referral: PropTypes.bool,
-    price: PropTypes.number,
     link: PropTypes.string,
-    splash: PropTypes.bool
+    card: PropTypes.bool
   }
   static defaultProps = {
-    book: false,
+    link: '',
     referral: false,
-    splash: false
+    splash: false,
+    card: false
   }
   constructor(props) {
     super(props);
     this.state = { likes: this.props.likes, inCart: 0 }
     this.getProduct = this.getProduct.bind(this);
-    this.productDetails = this.productDetails.bind(this);
+    this.productDetail = this.productDetail.bind(this);
   }
-  productDetails() {
-    alert(`Mock product detail for ${this.props.name}`);
+  // Product detail button event handler
+  productDetail() {
+    if (this.props.referral) {
+      window.open(this.props.link);
+    } else {
+      alert(`Mock product detail for ${this.props.name}`);
+    }
   }
+  // Get Product button event handler
   getProduct() {
     if (this.props.referral) {
       window.open(this.props.link);
@@ -35,89 +44,95 @@ export default class ProductSummary extends Component {
     }
   }
   render() {
-    let callToActionIcon = this.props.referral
+    // Different icon depending on Referral or Direct distribution
+    const callToActionIcon = this.props.referral
       ? <Glyphicon glyph="globe" />
       : <Glyphicon glyph="shopping-cart" />;
 
+    // Display inCart quantity if not zero, otherwise display icon
+    const callToActionContent = this.state.inCart
+      ? <Badge>{this.state.inCart}</Badge>
+      : callToActionIcon;
+
+    // Different color depending on Referral or Direct distribution
+    const callToActionStyle = this.props.referral ? 'primary' : 'success';
+
+    // Render this for Button bsSize
+    let buttonSize = '';
+
+    switch(this.props.display) {
+        case 'splash': buttonSize = 'large'; break;
+        case 'card': buttonSize = 'small'; break;
+        // Handle future display targets
+        default: buttonSize = 'small';
+    }
+
+    // Render this for Product detail button
+    let productDetailButton =
+      <Button
+        onClick={this.productDetail}
+        bsStyle="default"
+        bsSize={buttonSize}>
+        <Glyphicon glyph="info-sign" />
+      </Button>;
+
+    // No product detail required for referral products
+    productDetailButton = this.props.referral
+      ? ''
+      : productDetailButton;
+
+    // Render this for Get Product button
+    const getProductButton =
+      <Button
+        onClick={this.getProduct}
+        bsStyle={callToActionStyle}
+        bsSize={buttonSize}>
+        {this.props.referral ? 'Visit site ' : 'Add to cart '}
+        {callToActionContent}
+      </Button>
+
+    // Render this for call-to-action buttons
+    const buttons = <p>{getProductButton} {productDetailButton}</p>;
+
+    // Render this for product thumb
+    let productThumb =
+      <Thumbnail
+        href="#"
+        onClick={this.productDetail}
+        src={this.props.thumb}
+        alt="{this.props.name}" />;
+
+    // What to render as product summary - splash or card (default) style
     let renderProductSummary = '';
-    if (this.props.splash) {
+
+    if (this.props.display === 'splash') {
       renderProductSummary =
         <Grid>
           <Row>
             <Col xs={12} md={6}>
-              <Thumbnail
-                href="#"
-                onClick={this.productDetails}
-                src={this.props.image}
-                alt="{this.props.name}" />
+              {productThumb}
             </Col>
             <Col xs={12} md={6}>
-              <h1>
-                {this.props.name}
-                <small>
-                {this.props.book
-                  ? ' Book'
-                  : ' Gig'}
-                </small>
-              </h1>
+              <h1>{this.props.name} <small>{this.props.category}</small></h1>
               <p>{this.props.description}</p>
-              <h2 className="ProductSummary-price">${this.props.price}</h2>
-              <p>
-                <Button
-                  onClick={this.getProduct}
-                  bsStyle={this.props.referral ? 'primary' : 'success'}
-                  bsSize="large">
-                  {this.props.referral ? 'Visit site ' : 'Add to cart '}
-                  {this.state.inCart
-                    ? <Badge>{this.state.inCart}</Badge>
-                    : callToActionIcon}
-                </Button>
-                &nbsp;
-                <Button
-                  onClick={this.productDetails}
-                  bsStyle="default"
-                  bsSize="large">
-                  <Glyphicon glyph="info-sign" />
-                </Button>
-              </p>
+              <h2 className="ProductSummary-price">
+                ${this.props.price}
+              </h2>
+              {buttons}
             </Col>
           </Row>
         </Grid>;
     };
-    if (!this.props.splash) {
+    if (this.props.display === 'card') {
       renderProductSummary =
         <Well>
-          <Thumbnail
-            href="#"
-            onClick={this.productDetails}
-            src={this.props.image}
-            alt="{this.props.name}" />
-          <h2>
-            {this.props.name}
-            <small>
-            {this.props.book
-              ? ' Book'
-              : ' Gig'}
-            </small>
-          </h2>
+          {productThumb}
+          <h2>{this.props.name} <small>{this.props.category}</small></h2>
           <h4 className="ProductSummary-price">
             Price: ${this.props.price}
           </h4>
           <p>{this.props.description}</p>
-          <p>
-            <Button
-              onClick={this.getProduct}
-              bsStyle={this.props.referral ? 'primary' : 'success'}>
-              {this.props.referral ? 'Visit site ' : 'Add to cart '}
-              {this.state.inCart
-                ? <Badge>{this.state.inCart}</Badge>
-                : callToActionIcon}
-            </Button>
-            &nbsp;
-            <Button onClick={this.productDetails} bsStyle="default">
-              <Glyphicon glyph="info-sign" />
-            </Button>
-          </p>
+          {buttons}
         </Well>;
     };
     return (renderProductSummary);

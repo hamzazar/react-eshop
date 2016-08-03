@@ -7,11 +7,47 @@ import {
   Nav,
   NavItem,
   Jumbotron } from 'react-bootstrap';
-import bookImage from './book-mock.jpg';
-import gigImage from './gig-mock.jpg';
+import bookThumb from './book-mock.jpg';
+import gigThumb from './gig-mock.jpg';
+import productsData from './products.json';
+
+const products = JSON.parse(JSON.stringify(productsData));
 
 class App extends Component {
   render() {
+    const productFeatured = Object.keys(products).map(key => {
+      return (products[key].featured
+        ? <ProductSummary
+              key={key}
+              name={products[key].name}
+              description={products[key].description}
+              price={products[key].price}
+              link={products[key].link}
+              thumb={products[key].category === 'Book' ? bookThumb : gigThumb}
+              category={products[key].category}
+              referral={products[key].referral ? true : false}
+              display="splash"
+            />
+        : null
+      );
+    });
+    const productCatalog = Object.keys(products).map(key => {
+      return (!products[key].featured
+        ? <Col xs={12} md={6} lg={3} key={key}>
+            <ProductSummary
+              name={products[key].name}
+              description={products[key].description}
+              price={products[key].price}
+              link={products[key].link}
+              thumb={products[key].category === 'Book' ? bookThumb : gigThumb}
+              category={products[key].category}
+              referral={products[key].referral ? true : false}
+              display="card"
+            />
+          </Col>
+        : null
+      );
+    });
     return (
       <div>
         <Navbar inverse fixedTop>
@@ -34,61 +70,9 @@ class App extends Component {
             </Navbar.Collapse>
           </Grid>
         </Navbar>
-        <Jumbotron>
-          <ProductSummary
-            name="React Eshop"
-            description={`Easily reusable Eshop in React, ES6, and Facebook.`}
-            price={9.99}
-            book
-            referral
-            link='https://leanpub.com/reacteshop'
-            image={bookImage}
-            splash
-          />
-        </Jumbotron>
+        <Jumbotron>{productFeatured}</Jumbotron>
         <Grid>
-          <Row>
-            <Col xs={12} md={6} lg={3}>
-              <ProductSummary
-                name="Setup React Webpack"
-                description={`Development environment setup using React and
-                  Webpack.`}
-                price={25}
-                image={gigImage}
-              />
-            </Col>
-            <Col xs={12} md={6} lg={3}>
-              <ProductSummary
-                name="React Eshop"
-                description={`Easily reusable Eshop in React, ES6, and Facebook.`}
-                price={9.99}
-                book
-                referral
-                link='https://leanpub.com/reacteshop'
-                image={bookImage}
-              />
-            </Col>
-            <Col xs={12} md={6} lg={3}>
-              <ProductSummary
-                name="Custom React Stack"
-                description={`Custom React tech stack based on your project.`}
-                price={99}
-                image={gigImage}
-              />
-            </Col>
-            <Col xs={12} md={6} lg={3}>
-              <ProductSummary
-                name="React Speed Coding"
-                description={`Develop custom UI library in React, Flexbox, and
-                  PostCSS.`}
-                price={9.99}
-                book
-                referral
-                link='https://leanpub.com/reactspeedcoding'
-                image={bookImage}
-              />
-            </Col>
-          </Row>
+          <Row>{productCatalog}</Row>
         </Grid>
       </div>
     );
