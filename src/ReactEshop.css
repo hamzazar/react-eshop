@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.ReactEshop-nav-spacer {
+  min-height: 60px;
+}
+
+.ReactEshop-price {
+  color: seagreen;
+}

@@ -1,0 +1,17 @@
+.ProductDetail-description {
+  font-size: 1.2em;
+}
+
+.ProductDetail-price {
+  font-size: 2em;
+  line-height: 2em;
+}
+
+.ProductDetail-about-price {
+  color: darkgray;
+  font-size: 0.8em;
+}
+
+.ProductDetail-market-price {
+  text-decoration: line-through;
+}

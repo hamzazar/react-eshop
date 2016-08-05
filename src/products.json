@@ -3,6 +3,7 @@
       "description": "Easily reusable Eshop in React, ES6, and Facebook.",
       "link": "https://leanpub.com/reacteshop", "referral": true, "featured": true},
   "2": { "name": "Setup Webpack React", "category": "Gig", "price": 25,
+      "market_price": 45,
       "description": "Development environment setup using React and Webpack."},
   "3": { "name": "React Speed Coding", "category": "Book", "price": 9.99,
       "description": "Develop custom UI library in React, Flexbox, and PostCSS.",

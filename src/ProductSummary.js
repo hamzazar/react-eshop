@@ -1,7 +1,5 @@
-// @flow
 import React, { Component, PropTypes } from 'react';
 import { Grid, Row, Col, Well, Thumbnail, Button, Glyphicon, Badge } from 'react-bootstrap';
-import './ProductSummary.css';
 
 export default class ProductSummary extends Component {
   static propTypes = {
@@ -11,6 +9,7 @@ export default class ProductSummary extends Component {
     category: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     display: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     referral: PropTypes.bool,
     link: PropTypes.string
   }
@@ -18,18 +17,32 @@ export default class ProductSummary extends Component {
     link: '',
     referral: false
   }
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props);
+
     this.state = { inCart: 0 }
     this.getProduct = this.getProduct.bind(this);
     this.productDetail = this.productDetail.bind(this);
+  }
+  slugify(text)
+  {
+    return text.toString().toLowerCase().trim()
+    // Replace & with 'and'
+    .replace(/&/g, '-and-')
+     // Replace spaces, non-word characters and dashes with a single dash (-)
+    .replace(/[\s\W-]+/g, '-')
   }
   // Product detail button event handler
   productDetail() {
     if (this.props.referral) {
       window.open(this.props.link);
     } else {
-      alert(`Mock product detail for ${this.props.name}`);
+      const slug =
+        `${this.slugify(this.props.name)}--${this.props.id}`;
+      this.context.router.push(`detail/${slug}`);
     }
   }
   // Get Product button event handler
@@ -97,7 +110,7 @@ export default class ProductSummary extends Component {
         href="#"
         onClick={this.productDetail}
         src={this.props.thumb}
-        alt="{this.props.name}" />;
+        alt={this.props.name} />;
 
     // What to render as product summary - splash or card (default) style
     let renderProductSummary = '';
@@ -112,7 +125,7 @@ export default class ProductSummary extends Component {
             <Col xs={12} md={6}>
               <h1>{this.props.name} <small>{this.props.category}</small></h1>
               <p>{this.props.description}</p>
-              <h2 className="ProductSummary-price">
+              <h2 className="ReactEshop-price">
                 ${this.props.price}
               </h2>
               {buttons}
@@ -125,7 +138,7 @@ export default class ProductSummary extends Component {
         <Well>
           {productThumb}
           <h2>{this.props.name} <small>{this.props.category}</small></h2>
-          <h4 className="ProductSummary-price">
+          <h4 className="ReactEshop-price">
             Price: ${this.props.price}
           </h4>
           <p>{this.props.description}</p>
