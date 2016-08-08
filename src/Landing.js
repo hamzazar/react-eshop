@@ -23,7 +23,7 @@ export default class Landing extends Component {
               link={products[key].link}
               thumb={products[key].category === 'Book' ? bookThumb : gigThumb}
               category={products[key].category}
-              referral={products[key].referral ? true : false}
+              referral={products[key].referral}
               display="splash"
             />
         : null
@@ -41,7 +41,7 @@ export default class Landing extends Component {
               link={products[key].link}
               thumb={products[key].category === 'Book' ? bookThumb : gigThumb}
               category={products[key].category}
-              referral={products[key].referral ? true : false}
+              referral={products[key].referral}
               display="card"
             />
           </Col>

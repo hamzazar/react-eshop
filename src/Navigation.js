@@ -38,8 +38,15 @@ export default class Navigation extends Component {
               </Col>
               <Col xs={12} md={6}>
                 <div className="Navigation-promo">
-                  <span><strong>Get React Eshop</strong> for your business </span>
-                  <span><Button bsStyle="success">Ask us now</Button></span>
+                  <span>
+                    <strong>Get React Eshop</strong> for your business
+                  </span>
+                  &nbsp;
+                  <span>
+                    <Button bsStyle="success">
+                      Ask us now
+                    </Button>
+                  </span>
                 </div>
               </Col>
             </Row>

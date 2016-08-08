@@ -10,10 +10,12 @@ export default class ProductSummary extends Component {
     price: PropTypes.number.isRequired,
     display: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
+    marketPrice: PropTypes.number,
     referral: PropTypes.bool,
     link: PropTypes.string
   }
   static defaultProps = {
+    marketPrice: 0,
     link: '',
     referral: false
   }
@@ -26,6 +28,8 @@ export default class ProductSummary extends Component {
     this.state = { inCart: 0, checkoutTally: 0 }
     this.getProduct = this.getProduct.bind(this);
     this.productDetail = this.productDetail.bind(this);
+    this.checkout = this.checkout.bind(this);
+    this.viewCart = this.viewCart.bind(this);
   }
   slugify(text) {
     return text.toString().toLowerCase().trim()
@@ -56,6 +60,12 @@ export default class ProductSummary extends Component {
           this.props.price) * 100) / 100
       });
     }
+  }
+  viewCart() {
+    alert("View Cart");
+  }
+  checkout() {
+    alert("Checkout");
   }
   render() {
     // Different icon depending on Referral or Direct distribution
@@ -101,25 +111,30 @@ export default class ProductSummary extends Component {
         Detail <Glyphicon glyph="info-sign" />
       </Button>;
 
+    // Render this for Checkout button
     let checkoutButton =
       <span>
         <Button
+          onClick={this.checkout}
           bsStyle="warning"
           bsSize={buttonSize}>
           Buy <Badge>${this.state.checkoutTally}</Badge>
         </Button>
         &nbsp;
         <Button
+          onClick={this.viewCart}
           bsStyle="default"
           bsSize={buttonSize}>
           <Glyphicon glyph="shopping-cart" />
         </Button>
       </span>
+
     // No product detail required for referral products
     productDetailButton = this.props.referral
       ? null
       : productDetailButton;
 
+    // Render Checkout button conditionally
     productDetailButton = this.state.checkoutTally > 0
       ? checkoutButton
       : productDetailButton;
@@ -135,7 +150,7 @@ export default class ProductSummary extends Component {
         src={this.props.thumb}
         alt={this.props.name} />;
 
-    // What to render as product summary - splash or card (default) style
+    // Render this for product summary - splash or card (default) style
     let renderProductSummary = '';
 
     if (this.props.display === 'splash') {
