@@ -1,10 +1,11 @@
 // @flow
 import React, { Component } from 'react';
 import ProductSummary from './ProductSummary';
-import { Grid, Row, Col, Jumbotron } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import bookThumb from './book-mock.jpg';
 import gigThumb from './gig-mock.jpg';
 import productsData from './products.json';
+import './Landing.css';
 
 const products = JSON.parse(JSON.stringify(productsData));
 
@@ -16,8 +17,9 @@ export default class Landing extends Component {
               key={key}
               id={key}
               name={products[key].name}
-              description={products[key].description}
+              summary={products[key].summary}
               price={products[key].price}
+              marketPrice={products[key].market_price}
               link={products[key].link}
               thumb={products[key].category === 'Book' ? bookThumb : gigThumb}
               category={products[key].category}
@@ -33,8 +35,9 @@ export default class Landing extends Component {
             <ProductSummary
               id={key}
               name={products[key].name}
-              description={products[key].description}
+              summary={products[key].summary}
               price={products[key].price}
+              marketPrice={products[key].market_price}
               link={products[key].link}
               thumb={products[key].category === 'Book' ? bookThumb : gigThumb}
               category={products[key].category}
@@ -47,7 +50,9 @@ export default class Landing extends Component {
     });
     return (
       <div>
-        <Jumbotron>{productFeatured}</Jumbotron>
+        <div className="Landing-featured">
+          {productFeatured}
+        </div>
         <Grid>
           <Row>{productCatalog}</Row>
         </Grid>

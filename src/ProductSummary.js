@@ -4,7 +4,7 @@ import { Grid, Row, Col, Well, Thumbnail, Button, Glyphicon, Badge } from 'react
 export default class ProductSummary extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    summary: PropTypes.string.isRequired,
     thumb: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
@@ -23,12 +23,11 @@ export default class ProductSummary extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { inCart: 0 }
+    this.state = { inCart: 0, checkoutTally: 0 }
     this.getProduct = this.getProduct.bind(this);
     this.productDetail = this.productDetail.bind(this);
   }
-  slugify(text)
-  {
+  slugify(text) {
     return text.toString().toLowerCase().trim()
     // Replace & with 'and'
     .replace(/&/g, '-and-')
@@ -50,7 +49,12 @@ export default class ProductSummary extends Component {
     if (this.props.referral) {
       window.open(this.props.link);
     } else {
-      this.setState({ inCart: this.state.inCart + 1 });
+      this.setState({
+        inCart: this.state.inCart + 1,
+        checkoutTally: Math.round((
+          this.state.checkoutTally +
+          this.props.price) * 100) / 100
+      });
     }
   }
   render() {
@@ -65,7 +69,8 @@ export default class ProductSummary extends Component {
       : callToActionIcon;
 
     // Different color depending on Referral or Direct distribution
-    const callToActionStyle = this.props.referral ? 'primary' : 'success';
+    const callToActionStyle = this.props.referral
+      ? 'primary' : 'success';
 
     // Render this for Button bsSize
     let buttonSize = '';
@@ -83,7 +88,7 @@ export default class ProductSummary extends Component {
         onClick={this.getProduct}
         bsStyle={callToActionStyle}
         bsSize={buttonSize}>
-        {this.props.referral ? 'Visit site ' : 'Add to cart '}
+        {this.props.referral ? 'Visit ' : 'Add '}
         {callToActionContent}
       </Button>
 
@@ -93,12 +98,30 @@ export default class ProductSummary extends Component {
         onClick={this.productDetail}
         bsStyle="default"
         bsSize={buttonSize}>
-        <Glyphicon glyph="info-sign" />
+        Detail <Glyphicon glyph="info-sign" />
       </Button>;
 
+    let checkoutButton =
+      <span>
+        <Button
+          bsStyle="warning"
+          bsSize={buttonSize}>
+          Buy <Badge>${this.state.checkoutTally}</Badge>
+        </Button>
+        &nbsp;
+        <Button
+          bsStyle="default"
+          bsSize={buttonSize}>
+          <Glyphicon glyph="shopping-cart" />
+        </Button>
+      </span>
     // No product detail required for referral products
     productDetailButton = this.props.referral
       ? null
+      : productDetailButton;
+
+    productDetailButton = this.state.checkoutTally > 0
+      ? checkoutButton
       : productDetailButton;
 
     // Render this for call-to-action buttons
@@ -119,15 +142,21 @@ export default class ProductSummary extends Component {
       renderProductSummary =
         <Grid>
           <Row>
-            <Col xs={12} md={6}>
+            <Col xs={12} md={4}>
               {productThumb}
             </Col>
-            <Col xs={12} md={6}>
+            <Col xs={12} md={8}>
               <h1>{this.props.name} <small>{this.props.category}</small></h1>
-              <p>{this.props.description}</p>
-              <h2 className="ReactEshop-price">
-                ${this.props.price}
-              </h2>
+              <h3>{this.props.summary}</h3>
+              <h3 className="ReactEshop-price">
+                <span className="ReactEshop-price"> ${this.props.price}</span>
+                &nbsp;
+                {this.props.marketPrice
+                  ? <span className="ReactEshop-market-price">
+                      ${this.props.marketPrice}
+                    </span>
+                  : null}
+              </h3>
               {buttons}
             </Col>
           </Row>
@@ -138,10 +167,17 @@ export default class ProductSummary extends Component {
         <Well>
           {productThumb}
           <h2>{this.props.name} <small>{this.props.category}</small></h2>
-          <h4 className="ReactEshop-price">
-            Price: ${this.props.price}
+          <h4>
+            Price:
+            <span className="ReactEshop-price"> ${this.props.price}</span>
+            &nbsp;
+            {this.props.marketPrice
+              ? <span className="ReactEshop-market-price">
+                  ${this.props.marketPrice}
+                </span>
+              : null}
           </h4>
-          <p>{this.props.description}</p>
+          <p>{this.props.summary}</p>
           {buttons}
         </Well>;
     };

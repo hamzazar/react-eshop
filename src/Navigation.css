@@ -1,0 +1,11 @@
+.Navigation-container {
+  margin-bottom: -30px;
+}
+
+.Navigation-promo, .Navigation-search-spacer {
+  margin-top: 5px;
+}
+
+.Navigation-promo {
+  text-align: center;
+}

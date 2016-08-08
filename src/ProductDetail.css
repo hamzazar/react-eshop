@@ -1,4 +1,9 @@
+.ProductDetail-summary {
+  font-size: 1.4em;
+}
+
 .ProductDetail-description {
+  margin-top: 10px;
   font-size: 1.2em;
 }
 
@@ -8,10 +13,13 @@
 }
 
 .ProductDetail-about-price {
-  color: darkgray;
+  color: slategray;
   font-size: 0.8em;
 }
 
-.ProductDetail-market-price {
-  text-decoration: line-through;
+.ProductDetail-book-detail,
+.ProductDetail-gig-detail {
+  font-size: 1.2em;
+  padding-top: 5px;
+  padding-bottom: 10px;
 }
