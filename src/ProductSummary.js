@@ -157,10 +157,10 @@ export default class ProductSummary extends Component {
       renderProductSummary =
         <Grid>
           <Row>
-            <Col xs={12} md={4}>
+            <Col xs={12} md={3}>
               {productThumb}
             </Col>
-            <Col xs={12} md={8}>
+            <Col xs={12} md={9}>
               <h1>{this.props.name} <small>{this.props.category}</small></h1>
               <h3>{this.props.summary}</h3>
               <h3 className="ReactEshop-price">
