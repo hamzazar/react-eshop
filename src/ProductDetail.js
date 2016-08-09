@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import './ProductDetail.css';
-import { Grid, Row, Col, Thumbnail, Glyphicon, Badge, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Thumbnail, Glyphicon, Badge, Button }
+  from 'react-bootstrap';
 import bookThumb from './book-mock.jpg';
 import gigThumb from './gig-mock.jpg';
 import productsData from './products.json';
@@ -14,6 +15,11 @@ export default class ProductDetail extends Component {
     super(props);
     this.state = { inCart: 0, checkoutTally: 0, product: null};
     this.getProduct = this.getProduct.bind(this);
+  }
+  componentWillMount() {
+    const slug = this.props.params.slug;
+    const id = slug.substring(slug.indexOf('--') + 2);
+    this.setState({ product: products[id] });
   }
   // Get product button event handler
   getProduct() {
@@ -32,14 +38,22 @@ export default class ProductDetail extends Component {
   checkout() {
     alert("Checkout");
   }
-  componentDidMount() {
-    const slug = this.props.params.slug;
-    const id = slug.substring(slug.indexOf('--') + 2);
-    this.setState({ product: products[id] });
-  }
   render() {
-    let detail = <h2>Product not found</h2>;
+    let detail =
+      <Grid>
+        <h2>We could not find that product.</h2>
+        <h3>Try searching or using the top navigation
+          to find what you are looking for.</h3>
+      </Grid>;
+
     if (this.state.product) {
+      const productThumb =
+        <Thumbnail
+          href="#"
+          src={this.state.product.category ===
+            'Book' ? bookThumb : gigThumb}
+          alt={this.state.product.name} />
+
       const price =
         <div className="ProductDetail-price">
           Price:&nbsp;
@@ -55,14 +69,27 @@ export default class ProductDetail extends Component {
 
       const bookDetail =
         <div className="ProductDetail-book-detail">
-          <span><Glyphicon glyph="book" /> <b>Pages:</b> {this.state.product.pages}</span>
-          <span> | <Glyphicon glyph="user" /> <b>Reader Level:</b> {this.state.product.reader_level}</span>
+          <span>
+            <Glyphicon glyph="book" />
+            <b>Pages:</b> {this.state.product.pages}
+          </span>
+          <span>
+            &nbsp;| <Glyphicon glyph="user" />&nbsp;
+            <b>Reader Level:</b>&nbsp;
+            {this.state.product.reader_level}
+          </span>
         </div>;
 
       const gigDetail =
         <div className="ProductDetail-gig-detail">
-          <span><b>Duration:</b> {this.state.product.duration}</span>
-          <span> | <b>Deliverable:</b> {this.state.product.deliverable}</span>
+          <span>
+            <b>Duration:</b>&nbsp;
+            {this.state.product.duration}
+          </span>
+          <span>
+            &nbsp;| <b>Deliverable:</b>&nbsp;
+            {this.state.product.deliverable}
+          </span>
         </div>;
 
       // Display inCart quantity if not zero, otherwise display icon
@@ -103,10 +130,7 @@ export default class ProductDetail extends Component {
         <Grid>
           <Row>
             <Col xs={12} md={4}>
-            <Thumbnail
-              href="#"
-              src={this.state.product.category === 'Book' ? bookThumb : gigThumb}
-              alt={this.state.product.name} />
+              {productThumb}
             </Col>
             <Col xs={12} md={8}>
               <h1>
@@ -117,8 +141,10 @@ export default class ProductDetail extends Component {
               <p className="ProductDetail-summary">
                 {this.state.product.summary}
               </p>
-              {this.state.product.category === 'Book' ? bookDetail : null}
-              {this.state.product.category === 'Gig' ? gigDetail : null}
+              {this.state.product.category ===
+                'Book' ? bookDetail : null}
+              {this.state.product.category ===
+                'Gig' ? gigDetail : null}
               {getProductButton}
               &nbsp;
               {checkoutButton}

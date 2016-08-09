@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, Well, Thumbnail, Button, Glyphicon, Badge } from 'react-bootstrap';
+import { Grid, Row, Col, Well, Thumbnail, Button, Glyphicon, Badge } 
+  from 'react-bootstrap';
 
 export default class ProductSummary extends Component {
   static propTypes = {
